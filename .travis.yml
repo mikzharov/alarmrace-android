@@ -6,3 +6,7 @@ android:
   - platform-tools
   - build-tools-26.0.1
   - extra-android-m2repository
+licenses:
+  - 'android-sdk-preview-license-52d11cd2'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
