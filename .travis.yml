@@ -6,6 +6,7 @@ android:
   - platform-tools
   - build-tools-26.0.2
   - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-26
 licenses:
   - 'android-sdk-preview-license-52d11cd2'
   - 'android-sdk-license-.+'
