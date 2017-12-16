@@ -17,7 +17,6 @@ licenses:
   - 'android-sdk-license-.+'
   - 'google-gdk-license-.+'
 script:
-  - ./gradlew clean installDebug
   - ./gradlew check
   - ./gradlew testDebugUnitTest
 notifications:
