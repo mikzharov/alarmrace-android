@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">alarmrace</string>
+    <string name="app_name">Alarmrace</string>
+    <string name="facebook_app_id">1259001467466853</string>
+    <string name="fb_login_protocol_scheme">fb1259001467466853</string>
 </resources>
