@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Alarmrace</string>
     <string name="game_invite">Game Invite</string>
-    <string name="acs_game_invite">Enter your game invite here to play</string>
-    <string name="button_game_invite">Play!</string>
+    <string name="acs_game_invite">Challenge code</string>
+    <string name="button_game_invite">Accept challenge!</string>
+    <string name="button_new_game">Create new challenge</string>
+    <string name="main_title">Start game</string>
 </resources>
