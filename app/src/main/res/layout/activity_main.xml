@@ -12,29 +12,31 @@
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/round_border"
-            android:hint="@string/acs_game_invite"
-            android:inputType="textFilter"
-            android:textAlignment="center"
-            android:textSize="35sp"
-            android:layout_marginTop="100dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textAllCaps="true" />
+            android:layout_marginTop="100dp"
+            android:background="@drawable/round_border"
+            android:hint="@string/acs_game_invite"
+            android:inputType="textNoSuggestions"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="35sp" />
 
         <Button
             android:id="@+id/accept_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/button_game_invite"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:onClick="startGame"
+            android:text="@string/button_game_invite" />
 
         <Button
             android:id="@+id/create_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/button_new_game"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:onClick="createGame"
+            android:text="@string/button_new_game" />
 </LinearLayout>
