@@ -15,8 +15,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URI;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
 
 import static android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
 
@@ -61,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
     public void startGame(View v){
         EditText code_view = (EditText) findViewById(R.id.challenge_code);
         String code = code_view.getText().toString().toUpperCase();
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        // params.put("key", "");
+        client.post(this, getString(R.string.url_game_start), params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     public void createGame(View v){

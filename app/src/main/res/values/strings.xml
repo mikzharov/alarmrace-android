@@ -5,4 +5,5 @@
     <string name="button_game_invite">Accept challenge!</string>
     <string name="button_new_game">Create new challenge</string>
     <string name="main_title">Start game</string>
+    <string name="url_game_start">https://</string>
 </resources>
