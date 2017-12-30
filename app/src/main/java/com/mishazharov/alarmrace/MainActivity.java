@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -35,7 +36,20 @@ import static android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
 public class MainActivity extends AppCompatActivity {
     String DEBUG_TAG = "MainActivity";
     private FirebaseAuth mAuth;
-
+    private FirebaseRemoteConfig mRemoteConfig;
+    private void firebaseConfigFetch(){
+        mRemoteConfig.fetch(3600).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    mRemoteConfig.activateFetched();
+                    Log.d(DEBUG_TAG, "Successfully fetched remote config");
+                }else{
+                    Log.d(DEBUG_TAG, "Failed to fetch remote config");
+                }
+            }
+        });
+    }
     void signIn(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null){
@@ -43,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Log.d(DEBUG_TAG, "Anonymous success is successful");
+                        Log.d(DEBUG_TAG, "Anonymous sign in is successful");
                     } else {
-                        Log.d(DEBUG_TAG, "Anonymous success is not successful");
+                        Log.d(DEBUG_TAG, "Anonymous sign in is not successful");
                     }
                 }
             });
@@ -63,11 +77,15 @@ public class MainActivity extends AppCompatActivity {
         // It seems that no matter what I do, google keyboard still shows suggestions
         ((EditText) findViewById(R.id.challenge_code)).setInputType(TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         mAuth = FirebaseAuth.getInstance();
+        mRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        firebaseConfigFetch();
     }
     @Override
     public void onStart() {
         super.onStart();
         signIn();
+        firebaseConfigFetch();
     }
 
     public void startGame(View v){
@@ -83,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     // params.put("key", "");
 
                     client.addHeader("Authorization", task.getResult().getToken());
-                    client.post(getApplicationContext(), getString(R.string.url_api_root) + getString(R.string.url_api_game_start), params, new AsyncHttpResponseHandler() {
+                    client.post(getApplicationContext(), mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"), params, new AsyncHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -92,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                            Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
+                            Log.d(DEBUG_TAG, "Failure, Got statuscode " + statusCode);
                         }
                     });
                 }else{
