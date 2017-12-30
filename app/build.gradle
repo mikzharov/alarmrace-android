@@ -1,8 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-task finalize (type: Copy) {
+task finish (type: Copy) {
     from "../../public/"
+    into "."
+    include "*.json"
+}
+task start (type: Copy) {
+    from "../../private/"
     into "."
     include "*.json"
 }
@@ -41,5 +46,6 @@ dependencies {
 }
 apply plugin: 'com.google.gms.google-services'
 gradle.buildFinished {
-    finalize.execute()
+    finish.execute()
 }
+preBuild.dependsOn(start)

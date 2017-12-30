@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -69,24 +71,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGame(View v){
-        EditText code_view = (EditText) findViewById(R.id.challenge_code);
-        String code = code_view.getText().toString().toUpperCase();
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        // params.put("key", "");
-        client.post(this, getString(R.string.url_game_start), params, new AsyncHttpResponseHandler() {
-
+        mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                if(task.isSuccessful()){
+                    EditText code_view = (EditText) findViewById(R.id.challenge_code);
+                    String code = code_view.getText().toString().toUpperCase();
 
-            }
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    RequestParams params = new RequestParams();
+                    // params.put("key", "");
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    client.addHeader("Authorization", task.getResult().getToken());
+                    client.post(getApplicationContext(), getString(R.string.url_api_root) + getString(R.string.url_api_game_start), params, new AsyncHttpResponseHandler() {
 
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
+                        }
+                    });
+                }else{
+                    Log.d(DEBUG_TAG, "Could not get token");
+                    Exception e = task.getException();
+                    Log.d(DEBUG_TAG, e.toString());
+                    Crashlytics.logException(task.getException());
+                }
             }
         });
+
     }
 
     public void createGame(View v){
