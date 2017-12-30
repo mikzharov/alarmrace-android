@@ -98,19 +98,22 @@ public class MainActivity extends AppCompatActivity {
 
                     AsyncHttpClient client = new AsyncHttpClient();
                     RequestParams params = new RequestParams();
-                    // params.put("key", "");
+                    params.put("gameCode", code);
 
                     client.addHeader("Authorization", task.getResult().getToken());
+                    Log.d(DEBUG_TAG, "Url target: " + mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"));
                     client.post(getApplicationContext(), mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"), params, new AsyncHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                             Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
+                            Log.d(DEBUG_TAG, new String(responseBody));
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                             Log.d(DEBUG_TAG, "Failure, Got statuscode " + statusCode);
+                            Log.d(DEBUG_TAG, new String(responseBody));
                         }
                     });
                 }else{
