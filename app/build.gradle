@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+task finalize (type: Copy) {
+    from "../../public/"
+    into "."
+    include "*.json"
+}
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -35,3 +40,6 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.8.0'
 }
 apply plugin: 'com.google.gms.google-services'
+gradle.buildFinished {
+    finalize.execute()
+}
