@@ -1,16 +1,17 @@
 package com.mishazharov.alarmrace;
 
-import android.content.Intent;
+import android.app.Application;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,15 +22,8 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.ResponseHandlerInterface;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URI;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpResponse;
 
 import static android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
 
@@ -37,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
     String DEBUG_TAG = "MainActivity";
     private FirebaseAuth mAuth;
     private FirebaseRemoteConfig mRemoteConfig;
+    private void checkGoogleApi(){
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        int code = availability.isGooglePlayServicesAvailable(getApplicationContext());
+        if(code != ConnectionResult.SUCCESS){
+            availability.makeGooglePlayServicesAvailable(this);
+        }
+    }
     private void firebaseConfigFetch(){
         mRemoteConfig.fetch(3600).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(getString(R.string.main_title));
-
+        checkGoogleApi();
         // Makes sure that challenge code is typed in all caps. Just an aesthetic thing
         ((EditText) findViewById(R.id.challenge_code)).setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         firebaseConfigFetch();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        checkGoogleApi();
+    }
     public void startGame(View v){
         mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
             @Override
@@ -119,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     Log.d(DEBUG_TAG, "Could not get token");
                     Exception e = task.getException();
-                    Log.d(DEBUG_TAG, e.toString());
+                    Log.e(DEBUG_TAG, e.toString());
                     Crashlytics.logException(task.getException());
                 }
             }
