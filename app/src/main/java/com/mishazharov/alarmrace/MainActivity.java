@@ -1,6 +1,5 @@
 package com.mishazharov.alarmrace;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -95,42 +95,57 @@ public class MainActivity extends AppCompatActivity {
         checkGoogleApi();
     }
     public void startGame(View v){
-        mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-            @Override
-            public void onComplete(@NonNull Task<GetTokenResult> task) {
-                if(task.isSuccessful()){
-                    EditText code_view = (EditText) findViewById(R.id.challenge_code);
-                    String code = code_view.getText().toString().toUpperCase();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            currentUser.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                @Override
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        EditText code_view = findViewById(R.id.challenge_code);
+                        String code = code_view.getText().toString().toUpperCase();
 
-                    AsyncHttpClient client = new AsyncHttpClient();
-                    RequestParams params = new RequestParams();
-                    params.put("gameCode", code);
+                        AsyncHttpClient client = new AsyncHttpClient();
+                        RequestParams params = new RequestParams();
 
-                    client.addHeader("Authorization", task.getResult().getToken());
-                    Log.d(DEBUG_TAG, "Url target: " + mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"));
-                    client.post(getApplicationContext(), mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"), params, new AsyncHttpResponseHandler() {
+                        // This is the game invite
+                        params.put("gameCode", code);
 
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                            Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
-                            Log.d(DEBUG_TAG, new String(responseBody));
+                        // Send a UID so it can be kept in the database
+                        params.put("uid", currentUser.getUid());
+
+                        String token = FirebaseInstanceId.getInstance().getToken();
+                        if (token != null && !token.isEmpty()) {
+                            // Send a FCM token so that a notification can be sent to the user
+                            params.put("fcm_token", token);
                         }
 
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                            Log.d(DEBUG_TAG, "Failure, Got statuscode " + statusCode);
-                            Log.d(DEBUG_TAG, new String(responseBody));
+                        client.addHeader("Authorization", task.getResult().getToken());
+                        Log.d(DEBUG_TAG, "Url target: " + mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"));
+                        client.post(getApplicationContext(), mRemoteConfig.getString("url_api_root") + mRemoteConfig.getString("url_api_game_start"), params, new AsyncHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                Log.d(DEBUG_TAG, "Got statuscode " + statusCode);
+                                Log.d(DEBUG_TAG, new String(responseBody));
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                Log.d(DEBUG_TAG, "Failure, Got statuscode " + statusCode);
+                                Log.d(DEBUG_TAG, new String(responseBody));
+                            }
+                        });
+                    } else {
+                        Log.d(DEBUG_TAG, "Could not get token");
+                        Exception e = task.getException();
+                        if (e != null) {
+                            Log.e(DEBUG_TAG, e.toString());
                         }
-                    });
-                }else{
-                    Log.d(DEBUG_TAG, "Could not get token");
-                    Exception e = task.getException();
-                    Log.e(DEBUG_TAG, e.toString());
-                    Crashlytics.logException(task.getException());
+                        Crashlytics.logException(task.getException());
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 
     public void createGame(View v){
