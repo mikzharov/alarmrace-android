@@ -13,7 +13,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  * Created by Misha on 12/31/2017.
  */
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     private final String DEBUG_TAG = "MyFirebaseInstanceIDService.java";
     @Override
     public void onTokenRefresh() {
