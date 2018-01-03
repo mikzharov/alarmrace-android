@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.loopj.android:android-async-http:1.4.9'
-    api 'com.crashlytics.sdk.android:crashlytics:2.8.0@aar'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.8.0@aar'
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-config:11.8.0'
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
