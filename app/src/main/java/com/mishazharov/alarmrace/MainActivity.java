@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(DEBUG_TAG, "Anonymous sign in is successful");
                     } else {
                         Log.d(DEBUG_TAG, "Anonymous sign in is not successful");
+                        Exception e = task.getException();
+                        if(e != null){
+                            Log.d(DEBUG_TAG, e.toString());
+                        }
                     }
                 }
             });
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         checkGoogleApi();
     }
     public void startGame(View v){
+        Log.d(DEBUG_TAG, "Got startGame(...)");
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
             currentUser.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {

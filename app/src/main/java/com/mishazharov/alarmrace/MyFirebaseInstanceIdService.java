@@ -14,7 +14,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  */
 
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
-    private final String DEBUG_TAG = "MyFirebaseInstanceIDService.java";
+    private final String DEBUG_TAG = "MyFirebaseInstanceIdService.java";
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.
