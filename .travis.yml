@@ -6,12 +6,13 @@ android:
    - platform-tools
    - tools
    - build-tools-26.0.2
-   - android-26
+   - build-tools-27.0.2
+   - android-27
    - extra-google-google_play_services
    - extra-google-m2repository
    - extra-android-m2repository
    - sys-img-armeabi-v7a-google_apis-22
-   - sys-img-armeabi-v7a-google_apis-26
+   - sys-img-armeabi-v7a-google_apis-27
 licenses:
   - 'android-sdk-preview-license-52d11cd2'
   - 'android-sdk-license-.+'

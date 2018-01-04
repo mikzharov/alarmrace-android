@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "43278645378",
+    "firebase_url": "https://453482.firebaseio.com",
+    "project_id": "453482",
+    "storage_bucket": "453482.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81787010047:android:f9f98bc9e8cc8868",
+        "android_client_info": {
+          "package_name": "com.mishazharov.alarmrace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651981546-as645das4ca51sda615d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "sz54fv65zs1c6AzsdvsdvcACS51f6es1fcf6AF"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

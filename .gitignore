@@ -55,7 +55,6 @@ freeline/
 freeline_project_description.json
 
 # Also the defaults that came with the project (may be duplicates)
-*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">alarmrace</string>
+    <string name="app_name">Alarmrace</string>
+    <string name="game_invite">Game Invite</string>
+    <string name="acs_game_invite">Challenge code</string>
+    <string name="button_game_invite">Accept challenge!</string>
+    <string name="button_new_game">Create new challenge</string>
+    <string name="main_title">Start game</string>
+    <string name="url_api_root">https://us-central1-alarm-race-37f41.cloudfunctions.net/app</string>
+    <string name="url_api_game_start">/accept_invite</string>
 </resources>

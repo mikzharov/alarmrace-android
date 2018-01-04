@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>url_api_root</key>
+        <value>https://us-central1-alarm-race-37f41.cloudfunctions.net/app</value>
+    </entry>
+    <entry>
+        <key>url_api_game_start</key>
+        <value>/accept_invite</value>
+    </entry>
+</defaultsMap>
